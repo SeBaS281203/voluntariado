@@ -69,4 +69,35 @@ public class ActividadDAO {
         }
         return lista;
     }
+
+    public boolean eliminarPorId(int idActividad) {
+        String sql = "DELETE FROM actividad WHERE id_actividad = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idActividad);
+            int filas = ps.executeUpdate();
+            return filas > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar actividad: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean actualizar(Actividad a) {
+        String sql = "UPDATE actividad SET nombre_actividad = ?, descripcion = ?, fecha = ?, estado = ? "
+                   + "WHERE id_actividad = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, a.getNombre());
+            ps.setString(2, a.getDescripcion());
+            ps.setDate(3, a.getFecha());
+            ps.setString(4, a.getEstado());
+            ps.setInt(5, a.getIdActividad());
+            int filas = ps.executeUpdate();
+            return filas > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar actividad: " + e.getMessage());
+            return false;
+        }
+    }
 }

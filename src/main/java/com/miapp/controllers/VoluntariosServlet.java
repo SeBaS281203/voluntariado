@@ -28,6 +28,40 @@ public class VoluntariosServlet extends HttpServlet {
             return;
         }
 
+        String accion = value(request.getParameter("accion"));
+        if ("eliminar".equalsIgnoreCase(accion)) {
+            int idVoluntario = parseId(request.getParameter("idVoluntario"));
+            if (idVoluntario <= 0) {
+                request.setAttribute("error", "ID de voluntario inválido.");
+            } else if (voluntarioService.eliminarVoluntario(idVoluntario)) {
+                request.setAttribute("mensaje", "Voluntario eliminado con exito.");
+            } else {
+                request.setAttribute("error", "No se pudo eliminar el voluntario.");
+            }
+            loadAndForward(request, response);
+            return;
+        }
+
+        if ("editar".equalsIgnoreCase(accion)) {
+            int idVoluntario = parseId(request.getParameter("idVoluntario"));
+            String nombres = value(request.getParameter("nombres"));
+            String apellidos = value(request.getParameter("apellidos"));
+            String correo = value(request.getParameter("correo"));
+            String telefono = value(request.getParameter("telefono"));
+            String carrera = value(request.getParameter("carrera"));
+
+            Voluntario voluntario = new Voluntario(nombres, apellidos, correo, telefono, carrera, "Activo", 0);
+            voluntario.setIdVoluntario(idVoluntario);
+            if (voluntarioService.actualizarVoluntario(voluntario)) {
+                request.setAttribute("mensaje", "Voluntario actualizado con exito.");
+            } else {
+                request.setAttribute("error", "No se pudo actualizar el voluntario. Verifica los datos.");
+            }
+
+            loadAndForward(request, response);
+            return;
+        }
+
         String nombres = value(request.getParameter("nombres"));
         String apellidos = value(request.getParameter("apellidos"));
         String correo = value(request.getParameter("correo"));
@@ -58,5 +92,13 @@ public class VoluntariosServlet extends HttpServlet {
 
     private String value(String input) {
         return input == null ? "" : input.trim();
+    }
+
+    private int parseId(String input) {
+        try {
+            return Integer.parseInt(value(input));
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
     }
 }

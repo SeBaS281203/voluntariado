@@ -43,4 +43,34 @@ public class VoluntarioService {
     public List<Voluntario> listarVoluntarios() {
         return voluntarioDAO.listar();
     }
+
+    public boolean eliminarVoluntario(int idVoluntario) {
+        if (idVoluntario <= 0) {
+            System.out.println("Validación: ID de voluntario inválido.");
+            return false;
+        }
+        return voluntarioDAO.eliminarPorId(idVoluntario);
+    }
+
+    public boolean actualizarVoluntario(Voluntario v) {
+        if (v.getIdVoluntario() <= 0) {
+            System.out.println("Validación: ID de voluntario inválido.");
+            return false;
+        }
+
+        if (v.getNombres().isEmpty() || v.getApellidos().isEmpty() ||
+            v.getTelefono().isEmpty() || v.getCarrera().isEmpty()) {
+            System.out.println("Validación: Faltan datos obligatorios del voluntario.");
+            return false;
+        }
+
+        if (v.getCorreo() != null && !v.getCorreo().isEmpty()) {
+            if (!v.getCorreo().contains("@")) {
+                System.out.println("Validación: El correo no es válido.");
+                return false;
+            }
+        }
+
+        return voluntarioDAO.actualizar(v);
+    }
 }

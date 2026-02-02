@@ -77,6 +77,37 @@ public class VoluntarioDAO {
         }
         return lista;
     }
-    
-    // Aquí podrías agregar métodos para eliminar() o actualizar() más adelante
+
+    public boolean eliminarPorId(int idVoluntario) {
+        String sql = "DELETE FROM voluntario WHERE id_voluntario = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idVoluntario);
+            int filas = ps.executeUpdate();
+            return filas > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar voluntario: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean actualizar(Voluntario v) {
+        String sql = "UPDATE voluntario SET nombres = ?, apellidos = ?, correo = ?, telefono = ?, carrera = ?, estado = ? "
+                   + "WHERE id_voluntario = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, v.getNombres());
+            ps.setString(2, v.getApellidos());
+            ps.setString(3, v.getCorreo());
+            ps.setString(4, v.getTelefono());
+            ps.setString(5, v.getCarrera());
+            ps.setString(6, v.getEstado());
+            ps.setInt(7, v.getIdVoluntario());
+            int filas = ps.executeUpdate();
+            return filas > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar voluntario: " + e.getMessage());
+            return false;
+        }
+    }
 }

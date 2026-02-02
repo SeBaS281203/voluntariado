@@ -9,9 +9,9 @@ public class Conexion {
     private static Connection instancia = null;
 
     // Configuración de la BD (Ajusta según tu PC)
-    private static final String URL = "jdbc:mysql://localhost:3306/sistema_voluntariado";
-    private static final String USER = "root"; // Tu usuario de BD
-    private static final String PASS = "cwmtxzFtLpUjGhp1SCIy9Dv159nIXhLO"; // Tu contraseña de BD
+    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/sistema_voluntariado";
+    private static final String DEFAULT_USER = "root"; // Tu usuario de BD
+    private static final String DEFAULT_PASS = "WT9w5NZfHWkyhWcCvAxR7qIJXeCQIzs7"; // Tu contraseña de BD
 
     // 2. Constructor privado para evitar 'new Conexion()' desde fuera
     private Conexion() {
@@ -23,7 +23,10 @@ public class Conexion {
             if (instancia == null || instancia.isClosed()) {
                 // Cargar el driver (opcional en versiones nuevas, pero buena práctica)
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                instancia = DriverManager.getConnection(URL, USER, PASS);
+                String url = getEnvOrDefault("DB_URL", DEFAULT_URL);
+                String user = getEnvOrDefault("DB_USER", DEFAULT_USER);
+                String pass = getEnvOrDefault("DB_PASS", DEFAULT_PASS);
+                instancia = DriverManager.getConnection(url, user, pass);
                 System.out.println("Conexión exitosa a la base de datos.");
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -42,5 +45,10 @@ public class Conexion {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private static String getEnvOrDefault(String key, String fallback) {
+        String value = System.getenv(key);
+        return (value == null || value.isBlank()) ? fallback : value;
     }
 }

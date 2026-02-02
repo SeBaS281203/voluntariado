@@ -1,11 +1,11 @@
 services:
   db:
     image: mysql:8.0
+    env_file:
+      - .env
     environment:
-      - MYSQL_PASSWORD=secret
       - MYSQL_DATABASE=sistema_voluntariado
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      # - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
     ports:
       - 3306:3306
     volumes:
