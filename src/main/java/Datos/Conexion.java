@@ -7,14 +7,15 @@ import java.sql.SQLException;
 public class Conexion {
     // 1. Instancia estática (Singleton)
     private static Connection instancia = null;
-    
+
     // Configuración de la BD (Ajusta según tu PC)
     private static final String URL = "jdbc:mysql://localhost:3306/sistema_voluntariado";
     private static final String USER = "root"; // Tu usuario de BD
-    private static final String PASS = "";     // Tu contraseña de BD
+    private static final String PASS = "cwmtxzFtLpUjGhp1SCIy9Dv159nIXhLO"; // Tu contraseña de BD
 
     // 2. Constructor privado para evitar 'new Conexion()' desde fuera
-    private Conexion() {}
+    private Conexion() {
+    }
 
     // 3. Método estático para obtener la instancia
     public static Connection getConexion() {
@@ -30,7 +31,7 @@ public class Conexion {
         }
         return instancia;
     }
-    
+
     // Método para cerrar (opcional pero recomendado)
     public static void cerrar() {
         if (instancia != null) {
