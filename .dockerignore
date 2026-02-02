@@ -1,0 +1,16 @@
+.git
+.gitignore
+.vscode
+.idea
+*.iml
+*.log
+*.tmp
+
+# Build outputs
+/target
+
+# Local env
+.env
+
+# Misc
+Voluntariado.mwb
